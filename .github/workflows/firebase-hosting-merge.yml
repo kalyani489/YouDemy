@@ -1,0 +1,33 @@
+
+# env:
+#     API_KEY: ${{ secrets.API_KEY }}
+#     SECRET_ID: ${{ secrets.SECRET_ID }}
+
+
+name: Deploy to Firebase Hosting on merge
+"on":
+  push:
+    branches:
+      - main
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+#         run: |
+#         touch .env
+#         echo REACT_APP_FIREBASE=${{ secrets.FIREBASE_API_KEY }} >> .env
+#         echo REACT_APP_YOUTUBE=${{ secrets.YOUTUBE_API_KEY }} >> .env
+#         cat .env
+      - run: yarn install 
+      - run: yarn build
+        env:
+          CI: false
+          REACT_APP_FIREBASE: ${{ secrets.AIzaSyC5Pqtrk24_DzArs0DCegnI4Dmu47zoOTs }}
+          REACT_APP_YOUTUBE: ${{ secrets.AIzaSyDsEI2rAec3Mu_AQUhJa9AMf46GZj1voU }}
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_YOUDEMY_BF703 }}"
+          channelId: live
+          projectId: youdemy-bf703
